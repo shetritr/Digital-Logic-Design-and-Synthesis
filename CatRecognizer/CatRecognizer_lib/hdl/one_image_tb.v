@@ -13,7 +13,7 @@
 //	Designers: Maor Assayag, Refael Shetrit
 // using Mentor Graphics HDL Designer(TM) 2012.1 (Build 6)
 // ====================================================================
-module CatRecognizer_tb;
+module one_image_tb;
   localparam Amba_Word = 24;
   localparam Amba_Addr_Depth = 13;
   localparam WeightPrecision = 8;
@@ -40,6 +40,7 @@ module CatRecognizer_tb;
   reg  [(Amba_Addr_Depth -1):0] APB_address;
   wire [Amba_Word-1:0] APB_ReadData;
   wire CatRecOut;
+  reg CorrectResults [40:0];
 
 CatRecognizer #(.Amba_Word(Amba_Word), .Amba_Addr_Depth(Amba_Addr_Depth), .WeightPrecision(WeightPrecision)) CatRecognizer_1(
         .clk (clk),
@@ -109,13 +110,10 @@ CatRecognizer #(.Amba_Word(Amba_Word), .Amba_Addr_Depth(Amba_Addr_Depth), .Weigh
       @(posedge clk);
     end
     
-    fd = $fopen("C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/TestBenchInputFiles/ResultsPrecision5.txt","r");
-    tmp1 = $fgets(str, fd);
-    tmp2 = $sscanf(str, "%d", data);
-    if (data == CatRecOut) 
-      $write ("TestBench for image 3: true") ;
+    if (CorrectResults[11] == CatRecOut) 
+      $write ("TestBench for image: true") ;
     else
-      $write ("TestBench for image 3: false") ;
+      $write ("TestBench for image: false") ;
     $finish;
  end // initial begin
 
