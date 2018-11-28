@@ -1,8 +1,0 @@
-module adder_multiplier_3_pairs #(parameter PixelWidth=8, parameter WeightWidth=5) (
- input   [PixelWidth-1:0]    P1,
- input   [WeightWidth-1:0]   W1,
- output  [2*(WeightWidth+PixelWidth)):0] Result);
- 
- assign Result = P1 * W1;
-
-endmodule
