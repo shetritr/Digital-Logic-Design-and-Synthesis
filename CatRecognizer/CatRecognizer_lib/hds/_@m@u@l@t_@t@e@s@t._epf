@@ -1,0 +1,2 @@
+DEFAULT_ARCHITECTURE atom MULT_TEST
+DEFAULT_FILE atom CatRecognizer.v

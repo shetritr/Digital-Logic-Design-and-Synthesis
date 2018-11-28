@@ -1,0 +1,18 @@
+[DesignChecker]
+CatRecognizer_lib = $HDS_PROJECT_DIR/CatRecognizer_lib/designcheck
+[ModelSim]
+CatRecognizer_lib = $HDS_PROJECT_DIR/CatRecognizer_lib/work
+[hdl]
+CatRecognizer_lib = $HDS_PROJECT_DIR/CatRecognizer_lib/hdl
+[hds]
+CatRecognizer_lib = $HDS_PROJECT_DIR/CatRecognizer_lib/hds
+[hds_settings]
+default_library = CatRecognizer_lib
+design_root = CatRecognizer_lib.Allimages_tb(Allimages_tb)Allimages_tb.v
+version = 2
+[library_files_inclusion]
+CatRecognizer_lib = specify
+[library_type]
+CatRecognizer_lib = regular
+[shared]
+others = $HDS_TEAM_HOME/shared.hdp

@@ -1,0 +1,2 @@
+DEFAULT_ARCHITECTURE atom conv
+DEFAULT_FILE atom conv_tb.v

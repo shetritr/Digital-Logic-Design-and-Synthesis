@@ -1,0 +1,2 @@
+DEFAULT_ARCHITECTURE atom adder_multiplier_3_pairs
+DEFAULT_FILE atom adder_multiplier_3_pairs.v

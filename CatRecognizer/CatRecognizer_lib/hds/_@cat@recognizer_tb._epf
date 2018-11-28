@@ -1,0 +1,2 @@
+DEFAULT_FILE atom conv_tb.v
+DEFAULT_ARCHITECTURE atom CatRecognizer_tb

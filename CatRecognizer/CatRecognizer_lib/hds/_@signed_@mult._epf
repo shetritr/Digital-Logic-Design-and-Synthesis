@@ -1,0 +1,2 @@
+DEFAULT_ARCHITECTURE atom Signed_Mult
+DEFAULT_FILE atom Signed_Mult.v
