@@ -13,13 +13,13 @@ module APB (clock, reset, control, address, WriteData, ReadData, Start_work_reg)
 
   // PARAMETERS
   parameter Amba_Word=24;
-  parameter Amba_Addr_Depth=12;
+  parameter Amba_Addr_Depth=12 + 1;
   
   // DEFINE INPUTS VARS
   input wire clock;
   input wire reset;
   input wire [1:0] control;
-  input wire [(Amba_Addr_Depth -1):0] address;
+  input wire [(Amba_Addr_Depth):0] address;
   input wire [(Amba_Word -1):0]       WriteData;
   
   // DEFINE OUTPUTS VARS
@@ -42,6 +42,7 @@ module APB (clock, reset, control, address, WriteData, ReadData, Start_work_reg)
       out_start_work <= {(Amba_Word){1'b0}};
       out_val <= {(Amba_Word){1'b0}};
       en_read <= 1'b0;
+      RegisterBank[0] <= {(Amba_Word){1'b0}};
     end
     else 
       begin

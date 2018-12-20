@@ -1,0 +1,2 @@
+DEFAULT_ARCHITECTURE atom covergroup
+DEFAULT_FILE atom Coverage.v

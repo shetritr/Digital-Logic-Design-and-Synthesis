@@ -1,9 +1,10 @@
 // ====================================================================
 // File Name: Neuron.v
-// Description: Basic multiplier of 8bit pixel data and 5/8/16 bit corresponding weigth
+// Description: Basic multiplier of 8bit pixel data and 5/8/16 bit corresponding weight.
 //
 // Date: 28/11/2018
 // Designers: Maor Assayag, Refael Shetrit
+// using Mentor Graphics HDL Designer(TM) 2012.1 (Build 6)
 // ====================================================================
 module Neuron (p, w, result);
   

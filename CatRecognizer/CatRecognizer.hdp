@@ -8,7 +8,7 @@ CatRecognizer_lib = $HDS_PROJECT_DIR/CatRecognizer_lib/hdl
 CatRecognizer_lib = $HDS_PROJECT_DIR/CatRecognizer_lib/hds
 [hds_settings]
 default_library = CatRecognizer_lib
-design_root = CatRecognizer_lib.Allimages_tb(Allimages_tb)Allimages_tb.v
+design_root = CatRecognizer_lib.CatRecognizer(CatRecognizer)CatRecognizer.v
 version = 2
 [library_files_inclusion]
 CatRecognizer_lib = specify

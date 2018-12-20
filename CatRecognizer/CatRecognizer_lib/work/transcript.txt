@@ -1,17 +1,58 @@
-# vsim -L CatRecognizer_lib -l transcript.txt -i -multisource_delay latest -t ns +typdelays -foreign {hdsInit C:/MentorGraphics/HDS_2012.1/resources/downstream/modelsim/ModelSim_32Bit.dll} -pli {"C:/MentorGraphics/HDS_2012.1/resources/downstream/modelsim/ModelSim_32Bit.dll"} CatRecognizer_lib.one_image_tb 
+# vsim -L CatRecognizer_lib -l transcript.txt -i -multisource_delay latest -t ns +typdelays -foreign {hdsInit C:/MentorGraphics/HDS_2012.1/resources/downstream/modelsim/ModelSim_32Bit.dll} -pli {"C:/MentorGraphics/HDS_2012.1/resources/downstream/modelsim/ModelSim_32Bit.dll"} CatRecognizer_lib.Allimages_tb 
 # Loading C:/MentorGraphics/HDS_2012.1/resources/downstream/modelsim/ModelSim_32Bit.dll
-# Loading CatRecognizer_lib.one_image_tb
+# Loading CatRecognizer_lib.Allimages_tb
 # Loading CatRecognizer_lib.CatRecognizer
 # Loading CatRecognizer_lib.APB
 # Loading CatRecognizer_lib.WeighstBank
 # Loading CatRecognizer_lib.Neuron
-# ** Warning: (vsim-3015) C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/CatRecognizer.v(90): [PCDPC] - Port size (24 or 24) does not match connection size (1) for port 'WriteData'. The port definition is at: C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/WeighstBank.v(15).
-# 
-#         Region: /one_image_tb/CatRecognizer_1/Weights_Bank
 # ** Warning: Design size of 5 instances exceeds ModelSim ALTERA recommended capacity.
 # This may because you are loading cell libraries which are not recommended with
 # the ModelSim Altera version. Expect performance to be adversely affected.
+add wave -position insertpoint sim:/Allimages_tb/*
 run
-# TestBench for image: true** Note: $finish    : C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/one_image_tb.v(117)
-#    Time: 114922 ns  Iteration: 1  Instance: /one_image_tb
-# Break in Module one_image_tb at C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/one_image_tb.v line 117
+# TestBench for image 0 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 1 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 2 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 3 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 4 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 5 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 6 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 7 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 8 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 9 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 10 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 11 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 12 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 13 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 14 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 15 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 16 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 17 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 18 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 19 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 20 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 21 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 22 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 23 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 24 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 25 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 26 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 27 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 28 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 29 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 30 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 31 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 32 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 33 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 34 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 35 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 36 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 37 : true, Correct Answer = 1, CatRecgonizer = 1 
+# TestBench for image 38 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench for image 39 : true, Correct Answer = 0, CatRecgonizer = 0 
+# TestBench done successfuly, CatRecgonizer is accurate 
+# ** Note: $finish    : C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/Allimages_tb.v(141)
+#    Time: 4597116 ns  Iteration: 1  Instance: /Allimages_tb
+# Break in Module Allimages_tb at C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/Allimages_tb.v line 141
+clear
+# invalid command name "clear"

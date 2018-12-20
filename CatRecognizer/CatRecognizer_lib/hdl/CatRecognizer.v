@@ -13,16 +13,16 @@
 module CatRecognizer (clk,rst,PENABLE,PSEL,PWRITE,PADDR,PWDATA,PRDATA,CatRecOut);                 // Output result
   
    // PARAMETERS
-   parameter Amba_Word = 24;
-   parameter Amba_Addr_Depth = 12;
-   parameter WeightPrecision = 5; 
+   parameter Amba_Word = 24; // Part of the Amba standard at moodle site
+   parameter Amba_Addr_Depth = 12; // Part of the Amba standard at moodle site
+   parameter WeightPrecision = 5; // Bit depth of the weights and bias
   
    // LOCAL PARAMETERS
-   localparam pixelNumber = 12288;
-   localparam PixelWidth  = 8;
-   localparam resultWidth = (14 + Amba_Word + WeightPrecision);
-   localparam iteration   = 4096;
-   localparam WeightRowWidth = 3 * WeightPrecision;
+   localparam pixelNumber = 12288; // How many pixel we expect
+   localparam PixelWidth  = 8; // Width of Data row in the data file 
+   localparam resultWidth = (14 + Amba_Word + WeightPrecision); // Bit depth of the weights and bias
+   localparam iteration   = 4096; // Local var to keep track of the process
+   localparam WeightRowWidth = 3 * WeightPrecision; // Width of Data row in the weight bank
     
    // DEFINE INPUTS VARS
    input wire clk;                        // system clock
@@ -30,7 +30,7 @@ module CatRecognizer (clk,rst,PENABLE,PSEL,PWRITE,PADDR,PWDATA,PRDATA,CatRecOut)
    input wire PENABLE;                    // APB Bus Enable/clk
    input wire PSEL;                       // APB Bus Select
    input wire PWRITE;                     // APB Bus Write
-   input wire [Amba_Addr_Depth-1:0] PADDR;// APB Address Bus
+   input wire [Amba_Addr_Depth:0] PADDR;// APB Address Bus
    input wire [Amba_Word-1:0] PWDATA;     // APB Write Data Bus
    
    // DEFINE OUTPUT VARS
@@ -38,38 +38,41 @@ module CatRecognizer (clk,rst,PENABLE,PSEL,PWRITE,PADDR,PWDATA,PRDATA,CatRecOut)
    output wire CatRecOut;             // CatRecognizer result
   
    // LOCAL vars
-   reg doneFlag;
-   reg doneAddingBias;
-   reg doneIteration;
-   reg reset;
-   reg signed [15:0] bias [2:0];
-   reg [13:0] iterator;
-   reg signed [resultWidth - 1: 0] currentResult;
-   reg [(Amba_Addr_Depth -1):0] currentAddress;
+   reg doneFlag; // CatRecognizer produced a result
+   reg doneRead; // CatRecognizer produced a result
+   reg readFlag; // we currently reading from APB
+   reg doneAddingBias; // The process added bias to the cumulative sum 
+   reg doneIteration; // The process done computing the sigma
+   reg reset; // System reset
+   reg signed [15:0] bias [2:0]; // Bias bank
+   reg [Amba_Word-1:0] currentRead;
+   reg signed [resultWidth - 1: 0] currentResult; // current acumulative sum 
+   reg [Amba_Addr_Depth:0] currentAddress; // current address to fetch data from
+   reg [Amba_Word-1:0] currentReadData;
    reg CatResultOut;
   
    //APB regs
-   reg [1:0] APB_control;
+   reg [1:0] APB_control; // control for the APB bank
    reg [Amba_Word-1:0] APB_WriteData;
-   reg [(Amba_Addr_Depth -1):0] APB_address;
+   reg [Amba_Addr_Depth:0] APB_address;
    wire [Amba_Word-1:0] APB_ReadData;
    wire [Amba_Word-1:0] Start_work_reg;
   
    //WeightsBank regs
    reg [1:0] Weights_control;
-   wire [WeightRowWidth-1:0] Weights_ReadData;
-   reg [(Amba_Addr_Depth -1):0] Weights_address;
+   wire [WeightRowWidth-1:0] Weights_ReadData; 
+   reg [WeightRowWidth-1:0] Weights_WriteData; 
+   reg [Amba_Addr_Depth:0] Weights_address;
   
-   reg [(Amba_Word-1):0] PixelData_temp;
-   reg [(WeightRowWidth-1):0] WeightsData_temp;
+   reg [(Amba_Word-1):0] PixelData_temp;// current row of data of pixels
+   reg [(WeightRowWidth-1):0] WeightsData_temp;// current row of data of weights
    wire signed [(2*(WeightPrecision+PixelWidth)):0] Result_1;
    wire signed [(2*(WeightPrecision+PixelWidth)):0] Result_2;
    wire signed [(2*(WeightPrecision+PixelWidth)):0] Result_3;
   
    // MODULES
-   APB #(
-    .Amba_Word(Amba_Word),
-    .Amba_Addr_Depth(Amba_Addr_Depth)) APB_Bank(
+   //Register file for the pixels data.
+   APB #(.Amba_Word(Amba_Word),.Amba_Addr_Depth(Amba_Addr_Depth)) APB_Bank(
     .clock (clk),
     .reset(reset),
     .control (APB_control),
@@ -77,7 +80,8 @@ module CatRecognizer (clk,rst,PENABLE,PSEL,PWRITE,PADDR,PWDATA,PRDATA,CatRecOut)
     .WriteData (APB_WriteData),
     .ReadData (APB_ReadData),
     .Start_work_reg(Start_work_reg));
-        
+    
+  //Register file for the weights. include_file_5/8/16.v is an assign file genreated from python code.
    WeighstBank #(
     .Amba_Addr_Depth(Amba_Addr_Depth),
     .WeightPrecision(WeightPrecision),
@@ -88,45 +92,55 @@ module CatRecognizer (clk,rst,PENABLE,PSEL,PWRITE,PADDR,PWDATA,PRDATA,CatRecOut)
     .address (Weights_address),
     .WriteData (Weights_WriteData),
     .ReadData (Weights_ReadData));
-     
+   
+   //Basic multiplier of 8bit pixel data and 5/8/16 bit corresponding weight.  
    Neuron #(
     .PixelWidth(PixelWidth),
     .WeightWidth(WeightPrecision)) Neuron_1 (
     .p({1'b0,PixelData_temp[PixelWidth-1 :0]}),
     .w(WeightsData_temp[WeightPrecision -1 :0]),
     .result(Result_1));
-
-  Neuron #(
+    
+  //Basic multiplier of 8bit pixel data and 5/8/16 bit corresponding weight.
+   Neuron #(
     .PixelWidth(PixelWidth),
     .WeightWidth(WeightPrecision)) Neuron_2 (
     .p({1'b0,PixelData_temp[(2*PixelWidth)-1 : PixelWidth]}),
     .w(WeightsData_temp[(2*WeightPrecision)-1 : WeightPrecision]),
     .result(Result_2));
-
-  Neuron #(
+    
+  //Basic multiplier of 8bit pixel data and 5/8/16 bit corresponding weight.
+   Neuron #(
     .PixelWidth(PixelWidth),
     .WeightWidth(WeightPrecision)) Neuron_3 (
     .p({1'b0,PixelData_temp[(3*PixelWidth)-1 :(2*PixelWidth)]}),
     .w(WeightsData_temp[(3*WeightPrecision)-1 :(2*WeightPrecision)]),
     .result(Result_3));
-            
+  
+  // BODY          
    always @(posedge clk) begin : CatRecognizerOperation
      if (rst)
         begin
         // Intialize all local reg's
         reset          <= 1'b1;
         doneFlag       <= 1'b0;
+        doneRead       <= 1'b0;
+        readFlag       <= 1'b0;
         CatResultOut   <= 1'bz;
         doneAddingBias <= 1'b0;
         doneIteration  <= 1'b0;
         APB_control    <= 2'b00;
+        Weights_control <= 2'b00;
         currentResult  <= {(resultWidth){1'b0}};
-        WeightsData_temp <= {(WeightRowWidth){1'b0}};  
+        WeightsData_temp  <= {(WeightRowWidth){1'b0}};
+        Weights_WriteData <= {(WeightRowWidth){1'b0}};
+        currentReadData <= {(Amba_Word){1'bz}}; // current fetching from Register Files
         APB_WriteData    <= {(Amba_Word){1'b0}};
         PixelData_temp   <= {(Amba_Word){1'b0}};
-        APB_address      <= {(Amba_Addr_Depth){1'b0}};
-        Weights_address  <= {(Amba_Addr_Depth){1'b0}};
-        currentAddress   <= {{(Amba_Addr_Depth -1){1'b0}}, 1'b1};
+        currentRead <= {(Amba_Word){1'bz}}; // output ReadData
+        APB_address      <= {(Amba_Addr_Depth+1){1'b0}};
+        Weights_address  <= {(Amba_Addr_Depth+1){1'b0}};
+        currentAddress   <= {{(Amba_Addr_Depth){1'b0}}, 1'b1};
         bias[0]<= 16'b0000000000000000; // bias = 0
         bias[1]<= 16'b1111111111111111; // bias = -1
         bias[2]<= 16'b1111111001110110; // bias = -394
@@ -141,6 +155,23 @@ module CatRecognizer (clk,rst,PENABLE,PSEL,PWRITE,PADDR,PWDATA,PRDATA,CatRecOut)
           APB_address <= PADDR;
           APB_control <= 2'b01; // WRITE
         end 
+        else if ((PENABLE & !PWRITE))
+          begin
+          // Read data from APB
+          readFlag <= 1'b1;
+          APB_address <= PADDR;
+          APB_control <= 2'b10; // READ
+        end
+        else if (readFlag)
+          begin
+          readFlag <= 0'b1;
+          currentRead <= APB_ReadData;
+          doneRead <= 1'b1;
+        end
+        else if (doneRead) 
+          begin
+          doneRead <= 1'b0;
+        end
         else if ((Start_work_reg == 'b1) & (doneFlag == 0)) 
           begin
           if (doneIteration == 0) 
@@ -169,12 +200,12 @@ module CatRecognizer (clk,rst,PENABLE,PSEL,PWRITE,PADDR,PWDATA,PRDATA,CatRecOut)
             end
                  
             // Iterat
-            currentAddress <= currentAddress + {{(Amba_Addr_Depth -1){1'b0}},1'b1};  
+            currentAddress <= currentAddress + {{(Amba_Addr_Depth){1'b0}},1'b1};  
           end 
           else if (doneAddingBias == 1'b0)
             begin
             case (WeightPrecision)
-              5'b00101 : currentResult <= currentResult + bias[0];// Add bias
+              5'b00101 : currentResult <= currentResult + bias[0]; // Add bias
               5'b01000 : currentResult <= currentResult + bias[1]; // Add bias
               5'b10000 : currentResult <= currentResult + bias[2]; // Add bias
               default  : currentResult <= currentResult + bias[0]; // Add bias
@@ -195,4 +226,5 @@ module CatRecognizer (clk,rst,PENABLE,PSEL,PWRITE,PADDR,PWDATA,PRDATA,CatRecOut)
   end //always begin
   
   assign CatRecOut = (doneFlag) ? CatResultOut : 1'bz;
+  assign PRDATA    = (doneRead) ? currentRead : {(Amba_Word){1'bz}};
 endmodule

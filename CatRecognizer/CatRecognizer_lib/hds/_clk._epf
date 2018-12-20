@@ -1,0 +1,2 @@
+DEFAULT_ARCHITECTURE atom clk
+DEFAULT_FILE atom Coverage.v

@@ -1,6 +1,6 @@
 // ====================================================================
 // File Name: Neuron.v
-// Description: Basic multiplier of 8bit pixel data and 5/8/16 bit corresponding weigth
+// Description: Basic multiplier of 8bit pixel data and 5/8/16 bit corresponding weight.
 //
 // Date: 28/11/2018
 // Designers: Maor Assayag, Refael Shetrit
@@ -13,7 +13,7 @@ module Neuron (p, w, result);
    parameter WeightWidth = 5;
   
   // DEFINE INPUTS VARS
-   input  wire signed  [PixelWidth:0]    p; // pixel data, padding 1bit 0 - enable us using signed
+   input  wire signed  [PixelWidth:0]    p; // pixel data, padding MSB 0 - enable us using signed
    input  wire signed  [WeightWidth-1:0] w; // weight data
   
   // DEFINE OUTPUTS VARS

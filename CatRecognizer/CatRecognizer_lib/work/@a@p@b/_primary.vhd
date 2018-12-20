@@ -3,7 +3,7 @@ use verilog.vl_types.all;
 entity APB is
     generic(
         Amba_Word       : integer := 24;
-        Amba_Addr_Depth : integer := 12
+        Amba_Addr_Depth : integer := 13
     );
     port(
         clock           : in     vl_logic;

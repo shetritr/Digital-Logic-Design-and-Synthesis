@@ -1,7 +1,7 @@
 // ====================================================================
 //	File Name: WeighstBank.v
 //	Description: Register file for the weights. include_file_5/8/16.v is an assign file
-//              genreated from phyton code. The value from WeightsPrecsion5/8/16.txt
+//              genreated from python code. The value from WeightsPrecsion5/8/16.txt
 //              Each register stores 3 Weights lines.
 //
 // Parameters : WeightPrecision = 5/8/16
@@ -25,7 +25,7 @@ module WeighstBank (clock, reset, control, address, WriteData, ReadData);
   input wire clock;
   input wire reset;
   input wire [1:0] control;
-  input wire [(Amba_Addr_Depth - 1):0]  address;
+  input wire [(Amba_Addr_Depth):0]  address;
   input wire [(WeightRowWidth - 1):0]   WriteData;
   
   // DEFINE OUTPUTS VARS
@@ -36,8 +36,7 @@ module WeighstBank (clock, reset, control, address, WriteData, ReadData);
   reg signed [WeightRowWidth - 1:0] out_val;
   reg en_read;
 
-  // BODY
-  // Read and write from register file
+  // BODY - Read and write from register file
   // control = 01 -> Write at least 3 wieghts to the register
   // control = 10 -> Read 1 data address of wights for the CPU
   always @(posedge clock) begin : WeightsBankOperation
@@ -46,10 +45,10 @@ module WeighstBank (clock, reset, control, address, WriteData, ReadData);
       out_val <= {(WeightRowWidth){1'b0}};
       en_read <= 1'b0;
       case (WeightPrecision) // intialize RegisterBank  
-        5'b00101 : begin `include "C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/include_file_5.v" end
-        5'b01000 : begin `include "C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/include_file_8.v" end
-        5'b10000 : begin `include "C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/include_file_16.v" end
-        default :  begin `include "C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/hdl/include_file_5.v" end
+        5'b00101 : begin `include "../hdl/include_file_5.v" end
+        5'b01000 : begin `include "../hdl/include_file_8.v" end
+        5'b10000 : begin `include "../hdl/include_file_16.v" end
+        default  : begin `include "../hdl/include_file_5.v" end
       endcase 
     end
     else 

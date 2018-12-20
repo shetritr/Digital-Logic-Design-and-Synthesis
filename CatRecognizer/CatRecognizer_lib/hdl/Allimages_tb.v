@@ -18,8 +18,8 @@ module Allimages_tb ;
   
   // LOCAL PARAM
   localparam Amba_Word = 24;
-  localparam Amba_Addr_Depth = 13;
-  localparam WeightPrecision = 16; //  <- CHANGE ONLY THIS NUMBER TO 5/8/16
+  localparam Amba_Addr_Depth = 12;
+  localparam WeightPrecision = 5; //  <- CHANGE ONLY THIS NUMBER TO 5/8/16
   localparam WeightRowWidth = WeightPrecision * 3;
   localparam PixelWidth = 8;
 
@@ -43,7 +43,7 @@ module Allimages_tb ;
   reg    PSEL;
   reg    PWRITE;
   reg  [Amba_Word-1:0] APB_WriteData;
-  reg  [(Amba_Addr_Depth -1):0] APB_address;
+  reg  [(Amba_Addr_Depth):0] APB_address;
   wire [Amba_Word-1:0] APB_ReadData;
   wire CatRecOut;
 
@@ -62,7 +62,7 @@ module Allimages_tb ;
   // BODY
  initial begin
    //READ CORRECT ANSWEARS
-   fd = $fopen($sformatf("C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/TestBenchInputFiles/ResultsPrecision%0d.txt",WeightPrecision),"r");
+   fd = $fopen($sformatf("../TestBenchInputFiles/ResultsPrecision%0d.txt",WeightPrecision),"r");
    while (!$feof(fd)) begin
      tmp1 = $fgets(str, fd);
      tmp2 = $sscanf(str, "%d", data);
@@ -72,7 +72,7 @@ module Allimages_tb ;
    
    //START WRITING IMAGES
    while (imageNumber < 40) begin
-    fd = $fopen($sformatf("C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/TestBenchInputFiles/Image%0d.txt",imageNumber),"r");
+    fd = $fopen($sformatf("../TestBenchInputFiles/Image%0d.txt",imageNumber),"r");
     clk = 0;
     i = 0;
     j = 0;
@@ -110,12 +110,12 @@ module Allimages_tb ;
     while (j < 4150) begin
       if (flag == 1) begin
         #8
-        PWRITE = 1'b0; 
+        PWRITE = 1'bz; 
         #2
         APB_address = 0;
         APB_WriteData = {{(Amba_Word-1){1'b0}},1'b1};
         #2 PWRITE = 1'b1; 
-        #8 PWRITE = 1'b0;
+        #8 PWRITE = 1'bz;
         flag = 0;
       end
       j = j+1;
