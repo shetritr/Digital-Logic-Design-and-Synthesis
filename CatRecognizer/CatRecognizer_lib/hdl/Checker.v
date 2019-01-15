@@ -11,7 +11,7 @@
 `timescale 1ns/1ns
 module Checker (APB_interface.Checker_net APB,
    input [(`Amba_Word -1):0] RegisterBankAPB [(2**`Amba_Addr_Depth)-1:0],
-   input signed [(`WeightRowWidth - 1):0] RegisterBankWeights [(2**`Amba_Addr_Depth)- 1:0],
+   input [(`WeightRowWidth - 1):0] RegisterBankWeights [(2**`Amba_Addr_Depth)- 1:0],
    input signed [`resultWidth - 1: 0] currentResult,
    input doneFlag,
    input doneRead,

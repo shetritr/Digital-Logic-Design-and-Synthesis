@@ -1,2 +1,0 @@
-DEFAULT_ARCHITECTURE atom APB_interface
-DEFAULT_FILE atom APB_interface.sv

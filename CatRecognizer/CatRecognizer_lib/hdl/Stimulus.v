@@ -28,11 +28,11 @@ module Stimulus (APB_interface.Stimulus_net APB);
   Randomizer #(.Amba_Word(`Amba_Word)) RandomDataGenerator =new();
   
   // System clocks
-  always #2 APB.clk = ~APB.clk;
+  always begin : generate_clock #2 APB.clk = ~APB.clk;
+  end
   
 // Main Body
-initial 
-begin 
+initial begin : init
   
   // =============
   // Test Reset Active High
@@ -94,8 +94,8 @@ begin
   j = 0;
   APB.PWRITE = 0;
   #35000 ResetDesign();
-  fd = $fopen($sformatf("../TestBenchInputFiles/Image%0d.txt",imageNumber),"r");
-  //fd = $fopen($sformatf("C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/TestBenchInputFiles/Image%0d.txt",imageNumber),"r");
+  //fd = $fopen($sformatf("../TestBenchInputFiles/Image%0d.txt",imageNumber),"r");
+  fd = $fopen($sformatf("C:/Users/MaorA/Desktop/CatRecognizer/CatRecognizer/CatRecognizer_lib/TestBenchInputFiles/Image%0d.txt",imageNumber),"r");
   imageNumber = imageNumber + 1;
   while (!$feof(fd)) begin
        tmp1 = $fgets(str, fd);

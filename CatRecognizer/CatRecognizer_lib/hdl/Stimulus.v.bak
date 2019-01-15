@@ -28,11 +28,11 @@ module Stimulus (APB_interface.Stimulus_net APB);
   Randomizer #(.Amba_Word(`Amba_Word)) RandomDataGenerator =new();
   
   // System clocks
-  always #2 APB.clk = ~APB.clk;
+  always begin : generate_clock #2 APB.clk = ~APB.clk;
   
 // Main Body
 initial 
-begin 
+begin
   
   // =============
   // Test Reset Active High

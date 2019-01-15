@@ -1,2 +1,0 @@
-DEFAULT_ARCHITECTURE atom stim_gen
-DEFAULT_FILE atom conv_tb.v

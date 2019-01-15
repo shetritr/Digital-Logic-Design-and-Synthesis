@@ -10,7 +10,6 @@
 // ==================================================================== 
 `resetall
 `timescale 1ns/1ns
-`include "Parameters.v"
 module tb_CatRecognizer ;
 
 APB_interface APB_inter();

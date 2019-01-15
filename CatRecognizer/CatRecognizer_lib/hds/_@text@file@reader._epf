@@ -1,2 +1,0 @@
-DEFAULT_ARCHITECTURE atom TextFileReader
-DEFAULT_FILE atom TextFileReader.v

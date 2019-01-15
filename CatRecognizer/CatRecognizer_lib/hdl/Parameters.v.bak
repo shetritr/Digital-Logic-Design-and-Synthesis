@@ -18,4 +18,3 @@
    `define resultWidth (14 + `Amba_Word + `WeightPrecision) // Bit depth of the weights and bias
    `define iteration   4096 // Local var to keep track of the process
    `define WeightRowWidth (3 * `WeightPrecision) // Width of Data row in the weight bank
-   `define PixelWidth = 8

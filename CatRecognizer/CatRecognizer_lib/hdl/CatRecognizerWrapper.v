@@ -8,13 +8,7 @@
 // ==================================================================== 
 module CatRecognizerWrapper (APB_interface.Cat_net interface_APB);
 
-// PARAMETERS
-   parameter Amba_Word = 24; // Part of the Amba standard at moodle site
-   parameter Amba_Addr_Depth = 12; // Part of the Amba standard at moodle site
-   parameter WeightPrecision = 5; // Bit depth of the weights and bias
-
-
-CatRecognizer #(.Amba_Word(Amba_Word), .Amba_Addr_Depth(Amba_Addr_Depth), .WeightPrecision(WeightPrecision)) CatRecognizer_1(
+CatRecognizer CatRecognizer_1(
         .clk (interface_APB.clk),
         .rst(interface_APB.rst),
         .PENABLE(interface_APB.PENABLE),
